@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { VideoService } from './video.service.js';
-import { CreateVideoDto } from '../dto/create-video-dto.js';
+import { CreateVideoDto } from '../auth/dto/create-video-dto.js';
 
 @Controller('video') //ЭТО КЛАСС будет начинаться с HTTP-запросов, начинающихся с пути
 export class VideoController {
