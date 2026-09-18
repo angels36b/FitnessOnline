@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { VideoService } from './video.service.js';
-import { CreateVideoDto } from '../dto/create-video-dto.js';
+import { CreateVideoDto } from '../auth/dto/create-video-dto.js';
 let VideoController = class VideoController {
     videoService;
     constructor(videoService) {

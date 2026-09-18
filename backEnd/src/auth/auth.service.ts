@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from "@nestjs/common";
 import { RegisterDto } from './dto/register.dto.js';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
