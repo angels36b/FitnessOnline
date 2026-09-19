@@ -44,10 +44,9 @@ export class VideoService {
     create(createVideoDto: CreateVideoDto): Video{
         const newVideo: Video = {
             id:(this.videos.length + 1).toString(),
-            ...createVideoDto,
+            ...createVideoDto, // используем spread-operator для копирования полей title, description, topic, duration
         };
     this.videos.push(newVideo);
-
     return newVideo;
     }
 }
