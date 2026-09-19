@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-    private users: any[] = [];
+    private users: any[] = []; //сохраняем данных
 
     async register(registerDto: RegisterDto){
         //мы деструктурируем свойства DTO

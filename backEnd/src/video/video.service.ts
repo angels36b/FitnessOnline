@@ -4,6 +4,7 @@ import { CreateVideoDto } from '../auth/dto/create-video-dto.js';
 
 @Injectable()
 export class VideoService {
+    //сохраняем данных
     private readonly videos: Video[] =[{
         id: "1",
         title: "title1",
@@ -37,3 +38,4 @@ export class VideoService {
         return newVideo;
     }
 }
+
