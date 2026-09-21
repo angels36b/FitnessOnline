@@ -1,2 +1,2 @@
-export declare class VideoModule {
+export declare class VideosModule {
 }

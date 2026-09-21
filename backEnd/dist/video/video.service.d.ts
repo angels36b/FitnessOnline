@@ -1,8 +1,14 @@
-import { Video } from '../interface/video.interface.js';
-import { CreateVideoDto } from '../auth/dto/create-video-dto.js';
+import { CreateVideoDto } from "./dto/create-video.dto.js";
+import { UpdateVideoDto } from "./dto/update-video.dto.js";
+import { ReplaceVideoDto } from "./dto/replace-viceo.dto.js";
+import { VideoModel } from "./models/video.interface.js";
 export declare class VideoService {
     private readonly videos;
-    findAll(): Video[];
-    findOne(id: string): Video;
-    createVideo(video: CreateVideoDto): Video;
+    findAll(): VideoModel[];
+    findOne(id: number): VideoModel;
+    create(createVideoDto: CreateVideoDto): VideoModel;
+    update(id: number, updateVideoDto: UpdateVideoDto): VideoModel;
+    replace(id: number, replaceVideoDto: ReplaceVideoDto): VideoModel;
+    remove(id: number): void;
+    private getNextId;
 }

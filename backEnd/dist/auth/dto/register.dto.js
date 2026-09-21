@@ -8,22 +8,33 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
 export class RegisterDto {
     email;
     password;
     name;
 }
 __decorate([
+    ApiProperty({
+        example: 'ivan@example.com',
+    }),
     IsEmail({}, { message: 'Электронная почта недействительна' }),
     IsNotEmpty({ message: ' электронная почта является обязательной' }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "email", void 0);
 __decorate([
+    ApiProperty({
+        example: 'password123',
+        minLength: 6,
+    }),
     IsString(),
     MinLength(6, { message: 'Пароль должен содержать не менее 6 символов' }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
 __decorate([
+    ApiProperty({
+        example: 'Иван Петров',
+    }),
     IsString(),
     IsNotEmpty({ message: 'имя обязательно' }),
     __metadata("design:type", String)

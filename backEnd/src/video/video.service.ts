@@ -1,53 +1,82 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Video } from '../interface/video.interface.js';
-import { CreateVideoDto } from '../auth/dto/create-video-dto.js';
+import {
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
+import {CreateVideoDto} from "./dto/create-video.dto.js";
+import {UpdateVideoDto} from "./dto/update-video.dto.js";
+import {ReplaceVideoDto} from "./dto/replace-viceo.dto.js";
+import {VideoModel} from "./models/video.interface.js";
+import {videos} from "../mockData/videos.mock.js";
 
 @Injectable()
 export class VideoService {
-    //сохраняем данных
-    private readonly videos: Video[] =[{
-        id: "1",
-        title: "title1",
-        description: "string",
-        topic: "Health",
-        duration: 10,
+    private readonly videos = videos
 
-    },
-    {
-        id: "2",
-        title: "title2",
-        description: 'Sport with your teacher',
-        topic: 'Fitness',
-        duration: 20,
-
-    },] 
-    
-    findAll(): Video[] {
+    findAll(): VideoModel[] {
         return this.videos;
     }
-    //Метод принимает строку и филтрует массив, проводя строку к нижнему регистру.
-    findByTopic(topic:string): Video[]{
-        return this.videos.filter(
-            (video) => video.topic.toLowerCase() === topic.toLowerCase(),
-        );
+
+    findOne(id: number): VideoModel {
+        const video = this.videos.find((video) => video.id === id);
+
+        if (!video) {
+            throw new NotFoundException(`Video with id ${id} not found`);
+        }
+
+        return video;
     }
 
-   //Поиск конкретного видео по его уникальному ID.
-    findOne(id:string): Video {
-        const video = this.videos.find((video) => video.id === id)
-        if (!video) {
-            throw new NotFoundException("Video with the id not found ")
-        }
-        return video
-    }
-  // Method to create new video// метод создания нового видеозаписи
-    create(createVideoDto: CreateVideoDto): Video{
-        const newVideo: Video = {
-            id:(this.videos.length + 1).toString(),
-            ...createVideoDto, // используем spread-operator для копирования полей title, description, topic, duration
+    create(createVideoDto: CreateVideoDto): VideoModel {
+        const newVideo: VideoModel = {
+            id: this.getNextId(),
+            ...createVideoDto,
         };
-    this.videos.push(newVideo);
-    return newVideo;
+
+        this.videos.push(newVideo);
+
+        return newVideo;
+    }
+
+    update(id: number, updateVideoDto: UpdateVideoDto): VideoModel {
+        const video = this.findOne(id);
+
+        Object.assign(video, updateVideoDto);
+
+        return video;
+    }
+
+    replace(id: number, replaceVideoDto: ReplaceVideoDto): VideoModel {
+        const videoIndex = this.videos.findIndex((video) => video.id === id);
+
+        if (videoIndex === -1) {
+            throw new NotFoundException(`Video with id ${id} not found`);
+        }
+
+        const replacedVideo: VideoModel = {
+            id,
+            ...replaceVideoDto,
+        };
+
+        this.videos[videoIndex] = replacedVideo;
+
+        return replacedVideo;
+    }
+
+    remove(id: number): void {
+        const videoIndex = this.videos.findIndex((video) => video.id === id);
+
+        if (videoIndex === -1) {
+            throw new NotFoundException(`Video with id ${id} not found`);
+        }
+
+        this.videos.splice(videoIndex, 1);
+    }
+
+    private getNextId(): number {
+        if (this.videos.length === 0) {
+            return 1;
+        }
+
+        return Math.max(...this.videos.map((video) => video.id)) + 1;
     }
 }
-

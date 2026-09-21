@@ -1,9 +1,15 @@
-import { VideoService } from './video.service.js';
-import { CreateVideoDto } from '../auth/dto/create-video-dto.js';
+import { VideoService } from "./video.service.js";
+import { VideoModel } from "./models/video.interface.js";
+import { UpdateVideoDto } from "./dto/update-video.dto.js";
+import { ReplaceVideoDto } from "./dto/replace-viceo.dto.js";
+import { CreateVideoDto } from "./dto/create-video.dto.js";
 export declare class VideoController {
-    private readonly videoService;
-    constructor(videoService: VideoService);
-    findAll(): import("../interface/video.interface.js").Video[];
-    findById(id: string): import("../interface/video.interface.js").Video;
-    createVideo(body: CreateVideoDto): import("../interface/video.interface.js").Video;
+    private readonly videosService;
+    constructor(videosService: VideoService);
+    findAll(): VideoModel[];
+    findOne(id: number): VideoModel;
+    create(createVideoDto: CreateVideoDto): VideoModel;
+    update(id: number, updateVideoDto: UpdateVideoDto): VideoModel;
+    replace(id: number, replaceVideoDto: ReplaceVideoDto): VideoModel;
+    remove(id: number): void;
 }

@@ -5,15 +5,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { Module } from '@nestjs/common';
-import { VideoController } from './video.controller.js';
-import { VideoService } from './video.service.js';
-let VideoModule = class VideoModule {
+import { VideoController } from "./video.controller.js";
+import { VideoService } from "./video.service.js";
+let VideosModule = class VideosModule {
 };
-VideoModule = __decorate([
+VideosModule = __decorate([
     Module({
         controllers: [VideoController],
-        providers: [VideoService]
+        providers: [VideoService],
+        exports: [VideoService],
     })
-], VideoModule);
-export { VideoModule };
+], VideosModule);
+export { VideosModule };
 //# sourceMappingURL=video.module.js.map
