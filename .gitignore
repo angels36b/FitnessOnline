@@ -35,3 +35,6 @@ coverage/
 .cache/
 .temp/
 .eslintcache
+
+# TypeScript incremental build cache
+*.tsbuildinfo

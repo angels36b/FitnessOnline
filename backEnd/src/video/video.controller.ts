@@ -1,35 +1,119 @@
-import { Controller, Get, Param, Post, Body, Query } from '@nestjs/common';
-import { VideoService } from './video.service.js';
-import { CreateVideoDto } from '../auth/dto/create-video-dto.js';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    HttpStatus,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Put,
+} from '@nestjs/common';
+import {
+    ApiResponse,
+    ApiTags,
+} from '@nestjs/swagger';
+import {VideoService} from "./video.service.js";
+import {VideoModel} from "./models/video.interface.js";
+import {UpdateVideoDto} from "./dto/update-video.dto.js";
+import {ReplaceVideoDto} from "./dto/replace-viceo.dto.js";
+import {CreateVideoDto} from "./dto/create-video.dto.js";
 
-@Controller('video') //ЭТО КЛАСС будет начинаться с HTTP-запросов, начинающихся с пути
-
+@ApiTags('videos')
+@Controller('videos')
 export class VideoController {
+    constructor(
+        private readonly videosService: VideoService,
+    ) {}
 
-    constructor(private readonly videoService: VideoService){}
-    
-    //Обрабатываем HTTP GET ЗАПРОСЫ НА ВИДЕО
     @Get()
-    findAll(@Query('topic') topic?: string){
-    //if parameter = topic, was passed  in the URL/
-        if (topic) {
-
-            return this.videoService.findByTopic(topic);
-        
-        }//Если параметр не передан, возвращаем полный каталог видео.
-        return this.videoService.findAll();
+    @ApiResponse({
+        status: 200,
+        description: 'Get all videos',
+        type: [VideoModel],
+    })
+    findAll(): VideoModel[] {
+        return this.videosService.findAll();
     }
 
-   
     @Get(':id')
-    findById(@Param('id') id:string){
-        console.log(id)
-
-        return this.videoService.findOne(id)
+    @ApiResponse({
+        status: 200,
+        description: 'Get video by id',
+        type: VideoModel,
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Video not found',
+    })
+    findOne(
+        @Param('id', ParseIntPipe) id: number,
+    ): VideoModel {
+        return this.videosService.findOne(id);
     }
 
-    @Post() //arquitecture REST
-    create(@Body() body: CreateVideoDto){
-        return this.videoService.create(body);
+    @Post()
+    @HttpCode(HttpStatus.CREATED)
+    @ApiResponse({
+        status: 201,
+        description: 'Video created',
+        type: VideoModel,
+    })
+    create(
+        @Body() createVideoDto: CreateVideoDto,
+    ): VideoModel {
+        return this.videosService.create(createVideoDto);
+    }
+
+    @Patch(':id')
+    @ApiResponse({
+        status: 200,
+        description: 'Video partially updated',
+        type: VideoModel,
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Video not found',
+    })
+    update(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateVideoDto: UpdateVideoDto,
+    ): VideoModel {
+        return this.videosService.update(id, updateVideoDto);
+    }
+
+    @Put(':id')
+    @ApiResponse({
+        status: 200,
+        description: 'Video replaced',
+        type: VideoModel,
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Video not found',
+    })
+    replace(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() replaceVideoDto: ReplaceVideoDto,
+    ): VideoModel {
+        return this.videosService.replace(id, replaceVideoDto);
+    }
+
+    @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @ApiResponse({
+        status: 204,
+        description: 'Video deleted',
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Video not found',
+    })
+    remove(
+        @Param('id', ParseIntPipe) id: number,
+    ): void {
+        this.videosService.remove(id);
     }
 }
